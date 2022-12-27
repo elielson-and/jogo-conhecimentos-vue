@@ -1,4 +1,4 @@
-# jogo-conhecimentos-vue
+# 🧠 Jogo Conhecimentos Gerais
 
 - Um pequeno jogo que consome a API Trivia, para gerar diversas perguntas de conhecimentos gerais.
 
@@ -7,25 +7,15 @@ A aplicação faz a requisição, exibe as perguntas e alternativas e valida que
 API: https://opentdb.com/
 
 
-## Project setup
+## Instalação das dependências
 ```
 npm install
 ```
-
-### Compiles and hot-reloads for development
+### Rodar o projeto
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
-```
-npm run build
-```
 
-### Lints and fixes files
-```
-npm run lint
-```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+@elielson_and
