@@ -1,37 +1,33 @@
 <template>
 
-  <div>
+  <template v-if="this.question">
 
-    <template v-if="this.question">
+    <h1 v-html="this.question"></h1>
+    <template v-for="(answer, index) in this.answers" :key="index">
+      <input 
+      :disabled="this.isSubmited" 
+      type="radio" name="options" 
+      :value="answer" 
+      v-model="this.chosenAnswer">
 
-      <h1 v-html="this.question"></h1>
-      <template v-for="(answer, index) in this.answers" :key="index">
-        <input 
-        :disabled="this.isSubmited"
-        type="radio" 
-        name="options" 
-        :value="answer"
-        v-model="this.chosenAnswer">
-
-        <label v-html="answer"></label> <br>
-      </template>
-      
-      <button v-if="!this.isSubmited" @click="this.submitAnswer()" class="send" type="button">ENVIAR</button>
-
-      <template v-if="this.isSubmited">
-        <div>
-          <hr>
-          <h3 v-if="this.chosenAnswer == this.correctAnswer" >✅ RESPOSTA CORRETA!</h3>
-          <h3 v-else>❌ Você errou.. a resposta correta é <u v-html="this.correctAnswer"></u></h3>
-          <br>
-          <button @click="this.getNewQuestion()" class="send" type="button">Próxima pergunta</button>
-        </div>
-      </template>
-
+      <label v-html="answer"></label> <br>
     </template>
 
+    <button v-if="!this.isSubmited" @click="this.submitAnswer()" class="send" type="button">ENVIAR</button>
 
-  </div>
+    <template v-if="this.isSubmited">
+      <div>
+        <hr>
+        <h3 v-if="this.chosenAnswer == this.correctAnswer">✅ RESPOSTA CORRETA!</h3>
+        <h3 v-else>❌ Você errou.. a resposta correta é <u v-html="this.correctAnswer"></u></h3>
+        <br>
+        <button @click="this.getNewQuestion()" class="send" type="button">Próxima pergunta</button>
+      </div>
+    </template>
+
+  </template>
+
+
 
 </template>
 
@@ -58,26 +54,26 @@ export default {
   },
 
 
-  methods:{
-    submitAnswer(){
-      if(!this.chosenAnswer){
+  methods: {
+    submitAnswer() {
+      if (!this.chosenAnswer) {
         alert("Escolha uma alternativa pasra prosseguir!")
-      }else{
+      } else {
         this.isSubmited = true
-        
+
       }
     },
-    getNewQuestion(){
+    getNewQuestion() {
       this.chosenAnswer = undefined;
       this.isSubmited = false;
 
       this.axios.get('https://opentdb.com/api.php?amount=1&category=18')
-      .then((response) => {
-        // Pega os dados da requisicao e insere nas variaveis
-        this.question = response.data.results[0].question
-        this.incorrectAnswers = response.data.results[0].incorrect_answers
-        this.correctAnswer = response.data.results[0].correct_answer
-      });
+        .then((response) => {
+          // Pega os dados da requisicao e insere nas variaveis
+          this.question = response.data.results[0].question
+          this.incorrectAnswers = response.data.results[0].incorrect_answers
+          this.correctAnswer = response.data.results[0].correct_answer
+        });
     }
   },
 
