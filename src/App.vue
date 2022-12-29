@@ -7,15 +7,27 @@
       <h1 v-html="this.question"></h1>
       <template v-for="(answer, index) in this.answers" :key="index">
         <input 
+        :disabled="this.isSubmited"
         type="radio" 
         name="options" 
         :value="answer"
-        v-model="this.chosen_answer">
+        v-model="this.chosenAnswer">
 
         <label v-html="answer"></label> <br>
-
       </template>
-      <button @click="this.submitAnswer()" class="send" type="button">send</button>
+      
+      <button v-if="!this.isSubmited" @click="this.submitAnswer()" class="send" type="button">ENVIAR</button>
+
+      <template v-if="this.isSubmited">
+        <div>
+          <hr>
+          <h3 v-if="this.chosenAnswer == this.correctAnswer" >✅ RESPOSTA CORRETA!</h3>
+          <h3 v-else>❌ Você errou.. a resposta correta é <u v-html="this.correctAnswer"></u></h3>
+          <br>
+          <button @click="this.getNewQuestion()" class="send" type="button">Próxima pergunta</button>
+        </div>
+      </template>
+
     </template>
 
 
@@ -32,7 +44,8 @@ export default {
       question: undefined,
       incorrectAnswers: undefined,
       correctAnswer: undefined,
-      chosen_answer: undefined
+      chosenAnswer: undefined,
+      isSubmited: false
     }
   },
 
@@ -47,26 +60,29 @@ export default {
 
   methods:{
     submitAnswer(){
-      if(!this.chosen_answer){
-        alert("Escolha uma alternativa para prosseguir!")
+      if(!this.chosenAnswer){
+        alert("Escolha uma alternativa pasra prosseguir!")
       }else{
-        if(this.chosen_answer == this.correctAnswer){
-          alert("RESPOSTA CORRETA!")
-        }else{
-          alert("Resposta incorreta!")
-        }
+        this.isSubmited = true
+        
       }
-    }
-  },
+    },
+    getNewQuestion(){
+      this.chosenAnswer = undefined;
+      this.isSubmited = false;
 
-  created() {
-    this.axios.get('https://opentdb.com/api.php?amount=1&category=18')
+      this.axios.get('https://opentdb.com/api.php?amount=1&category=18')
       .then((response) => {
         // Pega os dados da requisicao e insere nas variaveis
         this.question = response.data.results[0].question
         this.incorrectAnswers = response.data.results[0].incorrect_answers
         this.correctAnswer = response.data.results[0].correct_answer
-      })
+      });
+    }
+  },
+
+  created() {
+    this.getNewQuestion();
   }
 
 }
