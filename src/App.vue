@@ -1,5 +1,7 @@
 <template>
 
+  <ScorePoint :player="this.player" :computer="this.computer" />
+
   <template v-if="this.question">
 
     <h1 v-html="this.question"></h1>
@@ -32,8 +34,15 @@
 </template>
 
 <script>
+
+import ScorePoint  from './components/ScorePoint.vue';
+
 export default {
   name: 'App',
+
+  components: {
+    ScorePoint
+  },
 
   data() {
     return {
@@ -41,7 +50,10 @@ export default {
       incorrectAnswers: undefined,
       correctAnswer: undefined,
       chosenAnswer: undefined,
-      isSubmited: false
+      isSubmited: false,
+      player: 0,
+      computer: 0,
+      isWin: undefined,
     }
   },
 
@@ -57,9 +69,14 @@ export default {
   methods: {
     submitAnswer() {
       if (!this.chosenAnswer) {
-        alert("Escolha uma alternativa pasra prosseguir!")
+        alert("Escolha uma alternativa para prosseguir!")
       } else {
         this.isSubmited = true
+        if(this.chosenAnswer == this.correctAnswer){
+          this.player++
+        }else{
+          this.computer++;
+        }
 
       }
     },
@@ -75,6 +92,7 @@ export default {
           this.correctAnswer = response.data.results[0].correct_answer
         });
     }
+
   },
 
   created() {
