@@ -4,7 +4,6 @@
 
 A aplicação faz a requisição, exibe perguntas alternativas e valida a resposta do usuário.
 
-API: https://opentdb.com/
 
 
 ## Instalação das dependências
